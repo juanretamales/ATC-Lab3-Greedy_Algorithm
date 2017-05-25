@@ -17,88 +17,56 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+
 #include "funciones.h"
 
 int main(int argc, char** argv) 
 {
+    
     clock_t start = clock();
-    int entrada[12];
+    int entrada[12][2];
     int largo = 0;
+    int cantidad, moneda;
+    
+    
     
     printf("Iniciando...ok \n");
-    int a,b,c,d,e,f,g,h,i,j,k,l;
-    
-    int x;
-    int y=0;
     
     printf("Entrada.in...");
     
-    /* Preparandose para leer el archivo entrada.in */
     FILE *archivo;
-
     archivo = fopen("entrada.in","r");
-    fclose(archivo);
     
-    archivo = fopen("entrada.in","w+");
-    fputs("20 20000", archivo);
-    rewind(archivo);
     if (archivo == NULL)
     {
         printf("\nError de apertura del archivo. \n\n");
     }
     else
     {
-/*
-        while((caracter = fgetc(archivo)) != EOF)
-*/
-        while( !feof( archivo ))
+        //for(int i=0;i<)
+        while(fscanf( archivo, "%d %d",  &cantidad, &moneda) != EOF)
         {
-            int cantidad, moneda;
+            printf("\n Cantidad:[%d] Moneda:[%d]",cantidad,moneda);
+            /* Lee el archivo entrada.in pero en formato UTF8 sin BOM */
+            /* Verificamos que cantidad y moneda solo sean numericos */
             
-           // fscanf( archivo, "Cadena:[%d]",  cadena);
-            /* Revisando si la cadena tiene dos o mas items separados por espacio (solo se usaran los dos primeros) y los guarda en variables */
-            if(fscanf( archivo, "%d %d",  cantidad, moneda)==2)
+            if(cantidad>0 && moneda>0)
             {
-                printf("\n Cantidad:[%d] Moneda:[%d]",cantidad,moneda);
-                /* Lee el archivo entrada.in pero en formato UTF8 sin BOM */
-                /* Verificamos que cantidad y moneda solo sean numericos */
-                if(isdigit(cantidad)!=0 && isdigit(moneda)!=0)
-                {
-                    printf("\n Ambos son numericos");
-    /*              
-                    if(largo>0)
-                    {
-                        y=0;
-                        for ( x = 0; x < largo; x++ )
-                        {
-                            if(entrada[x]==(((int)caracter)-48))
-                            {
-                                y=1;
-                            }
-                        }
-                    }
-                    if(y==0)
-                    {
-                        entrada[largo]=((int)caracter)-48;
-                        largo++;
-                    }
-    */
-                }
-                else
-                {
-                    if(isdigit(cantidad)==0)
-                    {
-                        printf("\n - Descartando combinaciones con letras encontrada en cantidad: [%d] -",cantidad);
-                    }
-                    if(isdigit(moneda)==0)
-                    {
-                        printf("\n - Descartando combinaciones con letras encontrada en moneda: [%d] -",moneda);
-                    }
-                }
+                printf("\n Ambos son numericos");
+                entrada[largo][0] = cantidad;
+                entrada[largo][1] = moneda;
+                largo++;
             }
             else
             {
-                printf("\n ERROR: alguna linea de entrada.in no tiene espacios entre cantidad moneda y valor moneda");
+                if(cantidad==0)
+                {
+                    printf("\n - El valor: [%d] se descartara debido a que contiene letras",cantidad);
+                }
+                if(moneda==0)
+                {
+                    printf("\n - El valor: [%d] se descartara debido a que contiene letras",moneda);
+                }
             }
             if (feof(archivo))
             {
@@ -108,110 +76,58 @@ int main(int argc, char** argv)
         }
     }
     fclose(archivo);
+    
     /* Solo creara combinaciones si encontramos alguna entrada, de lo contrario desplegara un mensaje */
     if(largo>1)
     {
-        int salida = 0;
-        printf("ok \n");
-        printf("Formando las  combinaciones posibles y guardandolo en salida.out...");
-        /* -Creo el archivo salida.out sin contenido, y lo reemplaza de ser existente.  */
-        FILE *fp;
-        fp = fopen ( "salida.out", "w" );
-        fclose(fp);
-        printf("Terminando ejecucion, continuacion no implementada.");
-        /* -Creo la combinacion*/
-/*
-        for ( a = 0; a < largo; a++ )
+        int pago;
+        int entrega;
+        int vuelto;
+        while(pago==0 || entrega==0)
         {
-            for ( b = 0; b < largo; b++ )
+            while(vuelto!=0)
             {
-                for ( c = 0; c < largo; c++ )
+                int l=largo;
+                int operacion[12][2];
+                printf("(Introduce cero para terminar)");
+                printf("Total a pagar: ");
+                scanf("%d", &pago);
+                printf("(Introduce cero para terminar)");
+                printf("Cliente entrega: ");
+                scanf("%d", &entrega);
+                vuelto=pago-entrega;
+                if(vuelto>0)
                 {
-                    int temp[] = {entrada[a], entrada[b], entrada[c]};
-                    if(validadorIgualesConsecutivos(temp,3)==0)
+                    int temp=0;
+                    /* Reviso si dar vuelto de esa moneda es posible */
+                    temp=vuelto/entrada[l,2];
+                    if(temp>1)
                     {
-                        for ( d = 0; d < largo; d++ )
+                        /*reviso si tengo suficientes de esas monedas para dar vuelto */
+                        if(entrada[l,1]>=temp)
                         {
-                            int temp2[] = {entrada[a], entrada[b], entrada[c], entrada[d]};
-                            if(validadorIgualesConsecutivos(temp2,4)==0 && validadorConsecutivos(temp2,4)==0)
-                            {
-                                for ( e = 0; e < largo; e++ )
-                                {
-                                    int temp3[] = {entrada[a], entrada[b], entrada[c], entrada[d], entrada[e]};
-                                    if(validadorIgualesConsecutivos(temp3,5)==0 && validadorConsecutivos(temp3,5)==0)
-                                    {
-                                        for ( f = 0; f < largo; f++ )
-                                        {
-                                            int temp4[] = {entrada[a], entrada[b], entrada[c], entrada[d], entrada[e], entrada[f]};
-                                            if(validadorIgualesConsecutivos(entrada,6)==0 && validadorConsecutivos(temp4,6)==0)
-                                            {
-                                                for ( g = 0; g < largo; g++ )
-                                                {
-                                                    int temp5[] = {entrada[a], entrada[b], entrada[c], entrada[d], entrada[e], entrada[f], entrada[g]};
-                                                    if(validadorIgualesConsecutivos(temp5,7)==0 && validadorConsecutivos(temp5,7)==0)
-                                                    {
-                                                        for ( h = 0; h < largo; h++ )
-                                                        {
-                                                            int temp6[] = {entrada[a], entrada[b], entrada[c], entrada[d], entrada[e], entrada[f], entrada[g], entrada[h]};
-                                                            if(validadorIgualesConsecutivos(temp6,8)==0 && validadorConsecutivos(temp6,8)==0)
-                                                            {
-                                                                for ( i = 0; i < largo; i++ )
-                                                                {
-                                                                    int temp7[] = {entrada[a], entrada[b], entrada[c], entrada[d], entrada[e], entrada[f], entrada[g], entrada[h], entrada[i]};
-                                                                    if(validadorIgualesConsecutivos(temp7,9)==0 && validadorConsecutivos(temp7,9)==0)
-                                                                    {
-                                                                        for ( j = 0; j < largo; j++ )
-                                                                        {
-                                                                            int temp8[] = {entrada[a], entrada[b], entrada[c], entrada[d], entrada[e], entrada[f], entrada[g], entrada[h], entrada[i], entrada[j]};
-                                                                            if(validadorIgualesConsecutivos(temp8,10)==0 && validadorConsecutivos(temp8,10)==0)
-                                                                            {
-                                                                                for ( k = 0; k < largo; k++ )
-                                                                                {
-                                                                                    int temp9[] = {entrada[a], entrada[b], entrada[c], entrada[d], entrada[e], entrada[f], entrada[g], entrada[h], entrada[i], entrada[j], entrada[k]};
-                                                                                    if(validadorIgualesConsecutivos(temp9,11)==0 && validadorConsecutivos(temp9,11)==0)
-                                                                                    {
-                                                                                        for ( l = 0; l < largo; l++ )
-                                                                                        {
-                                                                                            int temp10[] = {entrada[a], entrada[b], entrada[c], entrada[d], entrada[e], entrada[f], entrada[g], entrada[h], entrada[i], entrada[j], entrada[k], entrada[l]};
-                                                                                            if(validadorIgualesConsecutivos(temp10,12)==0 && validadorImparImpar(entrada[a],entrada[l])==0 && validadorConsecutivos(temp10,12)==0)
-                                                                                            {
-                                                                                                fp = fopen ( "salida.out", "a" );
-                                                                                                fprintf(fp, "%d%d%d%d%d%d%d%d%d%d%d%d \n", entrada[a], entrada[b], entrada[c], entrada[d], entrada[e], entrada[f], entrada[g], entrada[h], entrada[i], entrada[j], entrada[k], entrada[l]);
-                                                                                                fclose ( fp );
-                                                                                                salida++;
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            /*Agrego a operacion para despues quitar a caja el total si finaliza exitosamente.*/
+                            operacion[l,2]=entrada[l,2];
+                            operacion[l,1]=entrada[l,2]-(vuelto/entrada[l,2]);
+                            /*Actualizo el vuelto a dar.*/
+                            vuelto= vuelto-(operacion[l,1]*operacion[l,2]);
+                            l--;
                         }
                     }
                 }
+                else
+                {
+                    if(vuelto<0)
+                    {
+                        printf("El cliente no entrego suficiente dinero");
+                    }
+                    if(vuelto=0)
+                    {
+                        printf("El cliente pago justo, no tiene vuelto.");
+                    }
+                }
             }
-        } 
-        printf("ok \n");
-        if(salida==0)
-        {
-            printf("No hubieron combinaciones validas para salida.out, revisa los numeros ingresados y asegurate de que minimo tengas 1 numero par. \n");
         }
-        else
-        {
-            printf("\n Se lograron crear %d combinaciones validas.", salida);
-        }
-*/
     }
     else
     {
