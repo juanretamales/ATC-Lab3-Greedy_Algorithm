@@ -53,9 +53,17 @@ int main(int argc, char** argv)
             if(cantidad>0 && moneda>0)
             {
                 printf("\n Ambos son numericos");
-                entrada[largo][0] = cantidad;
-                entrada[largo][1] = moneda;
-                largo++;
+                if(entrada[largo][1]<entrada[largo-1][1])
+                {
+                    entrada[largo][0] = cantidad;
+                    entrada[largo][1] = moneda;
+                    largo++;
+                }
+                else
+                {
+                    printf("\n el valor moneda de entrada.in debe ir de manera decendente, forzando cierre.");
+                    return (EXIT_FAILURE); 
+                }
             }
             else
             {
@@ -83,11 +91,11 @@ int main(int argc, char** argv)
         int pago;
         int entrega;
         int vuelto;
+        int actual;
         while(pago==0 || entrega==0)
         {
-            while(vuelto!=0)
+            for(int i=0;actual!=0 || entrada[i];i++)
             {
-                int l=largo;
                 int operacion[12][2];
                 printf("(Introduce cero para terminar)");
                 printf("Total a pagar: ");
@@ -96,21 +104,22 @@ int main(int argc, char** argv)
                 printf("Cliente entrega: ");
                 scanf("%d", &entrega);
                 vuelto=pago-entrega;
-                if(vuelto>0)
+                actual=vuelto;/*Dinero actual que falta para hacer el vuelto, no se trabaja con vuelto por que se vuelve a utilizar.*/
+                if(actual>0)
                 {
                     int temp=0;
                     /* Reviso si dar vuelto de esa moneda es posible */
-                    temp=vuelto/entrada[l,2];
+                    temp=actual/entrada[i,2];
                     if(temp>1)
                     {
                         /*reviso si tengo suficientes de esas monedas para dar vuelto */
-                        if(entrada[l,1]>=temp)
+                        if(entrada[i,1]>=temp)
                         {
                             /*Agrego a operacion para despues quitar a caja el total si finaliza exitosamente.*/
-                            operacion[l,2]=entrada[l,2];
-                            operacion[l,1]=entrada[l,2]-(vuelto/entrada[l,2]);
+                            operacion[i,2]=entrada[i,2];
+                            operacion[i,1]=entrada[i,2]-(actual/entrada[i,2]);
                             /*Actualizo el vuelto a dar.*/
-                            vuelto= vuelto-(operacion[l,1]*operacion[l,2]);
+                            actual= actual-(operacion[i,1]*operacion[i,2]);
                             l--;
                         }
                     }
