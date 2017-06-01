@@ -15,7 +15,7 @@
     *Salida: Numero int 1 si es valido o 0 de lo contrario.
     */
 //   int validadorNumero( char *c, char *m )
-int dinero(int entrada[][],int largo)
+    int dinero(int entrada[][2],int largo);
     
 #endif /* FUNCIONES_H */
 

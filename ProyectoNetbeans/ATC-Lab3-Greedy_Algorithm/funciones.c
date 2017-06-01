@@ -25,7 +25,13 @@
  *Entrada: numero entero mayor o igual a cero.
  *Salida: Numero int 1 si es valido o 0 de lo contrario.
  */
-int dinero(int entrada[][],int largo)
+int dinero(int entrada[][2],int largo)
 {
-    
+    int d=0;
+    for(int i=0;i<largo;i++)
+    {
+        d=d+(entrada[i][0]*entrada[i][1]);
+        //printf("\n Dinero al momento %d ",d);
+    }
+    return d;
 }

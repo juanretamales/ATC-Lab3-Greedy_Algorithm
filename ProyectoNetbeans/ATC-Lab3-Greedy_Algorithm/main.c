@@ -185,50 +185,57 @@ int main(int argc, char** argv)
                         if(entrada[i][0]>=temp)
                         {
                             /*Agrego a operacion para despues quitar a caja el total si finaliza exitosamente.*/
-                            operacion[o][1] = entrada[i][1];
-                            operacion[o][0] = temp;
+                            operacion[i][1] = entrada[i][1];
+                            operacion[i][0] = temp;
                             /*Actualizo el vuelto a dar.*/
-                            actual= actual-(operacion[o][0]*operacion[o][1]);
-                            o++;
+                            actual= actual-(operacion[i][0]*operacion[i][1]);
                         }
+                    }
+                    else
+                    {
+                        operacion[i][1] = entrada[i][1];
+                        operacion[i][0] = 0;
                     }
                 }
                 if(actual==0)
                 {
                     printf("\n Vuelto: %d",vuelto);
                     /*Muestro el mejor vuelto*/
-                    for(int i=0;i<o;i++)
+                    for(int i=0;i<largo;i++)
                     {
-                        /*Realizo efectivo la resta del dinero actual por el vuelto*/
-                        entrada[i][1]= entrada[i][1] - operacion[i][1];
-                        
-                        if(operacion[i][1]>999)
+                        if(operacion[i][0]>0)
                         {
-                            if(operacion[i][0]>1)
+                            /*Realizo efectivo la resta del dinero actual por el vuelto*/
+                            entrada[i][0]= entrada[i][0] - operacion[i][0];
+
+                            if(operacion[i][1]>999)
                             {
-                                printf("\n %d billetes de %d ",operacion[i][0],operacion[i][1]);
+                                if(operacion[i][0]>1)
+                                {
+                                    printf("\n %d billetes de %d ",operacion[i][0],operacion[i][1]);
+                                }
+                                else
+                                {
+                                    printf("\n %d billete de %d ",operacion[i][0],operacion[i][1]);
+                                }
                             }
                             else
                             {
-                                printf("\n %d billete de %d ",operacion[i][0],operacion[i][1]);
+                                if(operacion[i][0]>1)
+                                {
+                                    printf("\n %d monedas de %d ",operacion[i][0],operacion[i][1]);
+                                }
+                                else
+                                {
+                                    printf("\n %d moneda de %d ",operacion[i][0],operacion[i][1]);
+                                }
                             }
                         }
-                        else
-                        {
-                            if(operacion[i][0]>1)
-                            {
-                                printf("\n %d monedas de %d ",operacion[i][0],operacion[i][1]);
-                            }
-                            else
-                            {
-                                printf("\n %d moneda de %d ",operacion[i][0],operacion[i][1]);
-                            }
-                        }
-                        
                     }
                     cantPagos++;
                     fp = fopen ( "salida.out", "a" );
                     fprintf(fp, "Pago %d: %d \n", cantPagos, dinero(entrada,largo));
+                    printf("\n Pago %d: %d \n", cantPagos, dinero(entrada,largo));
                     fclose(fp);
                 }
                 else
