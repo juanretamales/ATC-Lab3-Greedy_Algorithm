@@ -14,7 +14,8 @@
     *Entrada: numero entero mayor o igual a cero.
     *Salida: Numero int 1 si es valido o 0 de lo contrario.
     */
-   int count( int S[], int m, int n );
+//   int validadorNumero( char *c, char *m )
+int dinero(int entrada[][],int largo)
     
 #endif /* FUNCIONES_H */
 
