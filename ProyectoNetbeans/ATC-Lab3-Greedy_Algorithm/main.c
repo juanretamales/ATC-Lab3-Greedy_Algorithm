@@ -138,37 +138,10 @@ int main(int argc, char** argv)
             int o=0;
             int operacion[12][2];
             printf("\n(Introduce cero para terminar)");
-            printf("\nTotal a pagar: ");
-            scanf("%s", e);
-            if(atoi(e)>0)
-            {
-                pago=atoi(e);
-            }
-            else if(atoi(e)==0)
-            {
-                pago=0;
-            }
-            else
-            {
-                pago=0;
-                printf("Error al introducir el pago");
-            }
+            pago=leer("\nTotal a pagar: ");
+            
             printf("\n(Introduce cero para terminar)");
-            printf("\nCliente entrega: ");
-            scanf("%s", e);
-            if(atoi(e)>0)
-            {
-                entrega=atoi(e);
-            }
-            else if(atoi(e)==0)
-            {
-                entrega=0;
-            }
-            else
-            {
-                entrega=0;
-                printf("\n Error al introducir el pago");
-            }
+            entrega=leer("\nTotal a pagar: ");
             vuelto=entrega-pago;
             if(vuelto>0)
             {

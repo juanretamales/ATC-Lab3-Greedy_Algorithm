@@ -9,13 +9,19 @@
 #ifndef FUNCIONES_H
     #define FUNCIONES_H
     /*
-    * validadorNumero  - verifica si el atributo ingresado sea numero mayor a 0
+    * dinero  - revuelve el dinero total de la matriz de cantidad dinero y valor dinero
     *
-    *Entrada: numero entero mayor o igual a cero.
-    *Salida: Numero int 1 si es valido o 0 de lo contrario.
+    *Entrada: Matriz de dinero, largo de la matriz
+    *Salida: Numero int con el valor del dinero total de la matriz.
     */
-//   int validadorNumero( char *c, char *m )
     int dinero(int entrada[][2],int largo);
+    /*
+    * leer  - pide por consola un numero, lo valida transformandolo y devuelve su valor
+    *
+    *Entrada: Texto char[] a mostrar para pedir el mensaje
+    *Salida: Numero int del valor leido si es valido o 0 de lo contrario.
+    */
+    int leer(char e[]);
     
 #endif /* FUNCIONES_H */
 
