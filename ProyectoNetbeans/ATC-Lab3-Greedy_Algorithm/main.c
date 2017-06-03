@@ -22,12 +22,15 @@
 
 int main(int argc, char** argv) 
 {
-    
+    int i=0;
+            
     clock_t start = clock();
-    int entrada[12][2];
-    int largo = 0;
+    int entrada[12][2]={{0, 20000},{0, 10000},{0, 5000},{0, 2000},{0, 1000},{0, 500},{0, 100},{0, 50},{0, 10},{0, 5},{0, 1}};
+    int largo = 11;
     int cantidad, moneda;
     int cantPagos = 0;
+    
+    int inicial=0;
     
     
     printf("Iniciando...ok \n");
@@ -43,31 +46,30 @@ int main(int argc, char** argv)
     }
     else
     {
-        //for(int i=0;i<)
         char m[12] ="" ;
         char c[12] ="" ;
         while(fscanf( archivo, "%s %s",  c, m) != EOF)
         {
-            //printf("\n Cantidad:[%s] Moneda:[%s] text version",c,m);
-            if(atoi(m)>0 && atoi(c)>0)
+            /*Revisa si es transformable y si son mayores a cero*/
+            if(atoi(m)>=0 && atoi(c)>=0)
             {
                 moneda=atoi(m);
                 cantidad=atoi(c);
-                //printf("\n Cantidad:[%d] Moneda:[%d] int version",cantidad,moneda);
                 if(largo>0)
                 {
-                    //printf("\n Largo > 0");
-                    //printf("\n %d < %d",moneda,entrada[largo][1]);
-                    if(moneda<entrada[largo-1][1])
+                    for(i=0;i<largo;i++)
                     {
-                        entrada[largo][0] = cantidad;
-                        entrada[largo][1] = moneda;
-                        largo++;
-                    }
-                    else
-                    {
-                        printf("\n el valor moneda de entrada.in debe ir de manera decendente, forzando cierre.");
-                        return (EXIT_FAILURE); 
+                        if(moneda==entrada[i][1])
+                        {
+                            entrada[i][0] = cantidad;
+                            //printf("\n Agregando %d  de %d ",cantidad,entrada[i][1]);
+                            inicial++;
+                        }
+                        if(i==largo)
+                        {
+                            printf("\n el valor moneda de entrada.in debe ir de manera decendente, forzando cierre.");
+                            return (EXIT_FAILURE); 
+                        }
                     }
                 }
                 else
@@ -77,37 +79,6 @@ int main(int argc, char** argv)
                     largo++;
                 }
             }
-            /* Lee el archivo entrada.in pero en formato UTF8 sin BOM */
-            /* Verificamos que cantidad y moneda solo sean numericos */
-            
-/*
-            if(cantidad>0 && moneda>0)
-            {
-                printf("\n Ambos son numericos");
-                if(entrada[largo][1]<entrada[largo-1][1])
-                {
-                    entrada[largo][0] = cantidad;
-                    entrada[largo][1] = moneda;
-                    largo++;
-                }
-                else
-                {
-                    printf("\n el valor moneda de entrada.in debe ir de manera decendente, forzando cierre.");
-                    return (EXIT_FAILURE); 
-                }
-            }
-            else
-            {
-                if(cantidad==0)
-                {
-                    printf("\n - El valor: [%d] se descartara debido a que contiene letras",cantidad);
-                }
-                if(moneda==0)
-                {
-                    printf("\n - El valor: [%d] se descartara debido a que contiene letras",moneda);
-                }
-            }
-*/
             if (feof(archivo))
             {
                 printf("\n Fin de la lectura");
@@ -123,7 +94,7 @@ int main(int argc, char** argv)
     fprintf(fp, "Inicial: %d \n", dinero(entrada,largo));
     fclose(fp);
     /* Solo creara combinaciones si encontramos alguna entrada, de lo contrario desplegara un mensaje */
-    if(largo>0)
+    if(inicial>0)
     {
         printf("\n Largo > 0");
         
@@ -134,14 +105,19 @@ int main(int argc, char** argv)
         char e[12] ="" ;
         while(pago!=0 || entrega!=0)
         {
-            int i=0;
             int o=0;
-            int operacion[12][2];
+            int operacion[12][2]={{0, 20000},{0, 10000},{0, 5000},{0, 2000},{0, 1000},{0, 500},{0, 100},{0, 50},{0, 10},{0, 5},{0, 1}};
             printf("\n(Introduce cero para terminar)");
             pago=leer("\nTotal a pagar: ");
-            
-            printf("\n(Introduce cero para terminar)");
-            entrega=leer("\nTotal a pagar: ");
+            if(pago!=0)
+            {
+                printf("\n(Introduce cero para terminar)");
+                entrega=leer("\nTotal a pagar: ");
+            }
+            else
+            {
+                entrega=0;
+            }
             vuelto=entrega-pago;
             if(vuelto>0)
             {
@@ -158,81 +134,115 @@ int main(int argc, char** argv)
                         if(entrada[i][0]>=temp)
                         {
                             /*Agrego a operacion para despues quitar a caja el total si finaliza exitosamente.*/
-                            operacion[i][1] = entrada[i][1];
-                            operacion[i][0] = temp;
+                            operacion[i][0] = 0 - temp;
+                            temp=operacion[i][0]*operacion[i][1];
                             /*Actualizo el vuelto a dar.*/
-                            actual= actual-(operacion[i][0]*operacion[i][1]);
+                            actual= actual + temp;
+                            //printf("\n Agregando a operacion %d  de %d para llegar a %d",operacion[i][0],entrada[i][1],temp);
                         }
                     }
                     else
                     {
-                        operacion[i][1] = entrada[i][1];
                         operacion[i][0] = 0;
                     }
                 }
+                //printf("\n actual: [%d]",actual);
                 if(actual==0)
                 {
                     printf("\n Vuelto: %d",vuelto);
+                    /*Asigno vuelto a actual para agregar el pago a caja*/
+                    actual=entrega;
+                    /*Agrego a operacion el resultado para operacion*/
+                    for(int i=0;i<largo;i++)
+                    {
+                        //printf("\n - Pago: %d",pago);
+                        /* Reviso si dar vuelto de esa moneda es posible */
+                        temp = actual / entrada[i][1];
+                        //printf("\n - Intentando %d billetes de %d",temp,entrada[i][1]);
+                            
+                        if(temp>0)
+                        {
+                            
+                            //printf("\n - - Actual [%d]",actual);
+                            
+                            /*Agrego a operacion para despues agregar a caja el total */
+                            operacion[i][0] = operacion[i][0]+temp;
+                            /*Actualizo el vuelto a dar.*/
+                            actual= actual-(temp*operacion[i][1]);
+                            if(actual==0)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    //printf("\n - - Actual [%d]",actual);
                     /*Muestro el mejor vuelto*/
                     for(int i=0;i<largo;i++)
                     {
-                        if(operacion[i][0]>0)
+                        if(operacion[i][0]<0)
                         {
-                            /*Realizo efectivo la resta del dinero actual por el vuelto*/
-                            entrada[i][0]= entrada[i][0] - operacion[i][0];
-
+                            /*Realizo efectivo la resta del dinero por el vuelto y la suma por el pago al dinero actual (caja)*/
                             if(operacion[i][1]>999)
                             {
                                 if(operacion[i][0]>1)
                                 {
-                                    printf("\n %d billetes de %d ",operacion[i][0],operacion[i][1]);
+                                    printf("\n %d billetes de %d ",abs(operacion[i][0]),operacion[i][1]);
                                 }
                                 else
                                 {
-                                    printf("\n %d billete de %d ",operacion[i][0],operacion[i][1]);
+                                    printf("\n %d billete de %d ",abs(operacion[i][0]),operacion[i][1]);
                                 }
                             }
                             else
                             {
                                 if(operacion[i][0]>1)
                                 {
-                                    printf("\n %d monedas de %d ",operacion[i][0],operacion[i][1]);
+                                    printf("\n %d monedas de %d ",abs(operacion[i][0]),operacion[i][1]);
                                 }
                                 else
                                 {
-                                    printf("\n %d moneda de %d ",operacion[i][0],operacion[i][1]);
+                                    printf("\n %d moneda de %d ",abs(operacion[i][0]),operacion[i][1]);
                                 }
                             }
+                        }
+                        /*Realiza los cambios en el arreglo*/
+                        if(operacion[i][0]!=0)
+                        {
+                             entrada[i][0]= entrada[i][0] + operacion[i][0];
                         }
                     }
                     cantPagos++;
                     fp = fopen ( "salida.out", "a" );
-                    fprintf(fp, "Pago %d: %d \n", cantPagos, dinero(entrada,largo));
-                    printf("\n Pago %d: %d \n", cantPagos, dinero(entrada,largo));
+                    int din = dinero(entrada,largo);
+                    fprintf(fp, "Pago %d: %d \n", cantPagos, din);
+                    //printf("\n Pago %d: %d \n", cantPagos, din);
                     fclose(fp);
                 }
                 else
                 {
-                    printf("\n No puede generar un vuelto con el saldo disponible, cerrando aplicacion");
+                    printf("\n No puede generar un vuelto con el saldo disponible, cerrando aplicacion, falto [%d]}",actual);
                     break;
                 }
             }
             else
             {
-                if(vuelto<0)
+                if(pago!=0 && entrega!=0)
                 {
-                    printf("\n El cliente no entrego suficiente dinero");
-                }
-                if(vuelto=0)
-                {
-                    printf("\n El cliente pago justo, no tiene vuelto.");
+                    if(vuelto<0)
+                    {
+                        printf("\n El cliente no entrego suficiente dinero");
+                    }
+                    if(vuelto=0)
+                    {
+                        printf("\n El cliente pago justo, no tiene vuelto.");
+                    }
                 }
             }
         }
     }
     else
     {
-        printf("\n Se necesitan como minimo 2 digitos en el archivo entrada.in de los cuales solo tiene %d ",largo);
+        printf("\n Se necesitan como minimo 1 par de digitos en el archivo entrada.in de los cuales solo tiene %d ",inicial);
     }
     printf("\n Tiempo transcurrido: %f segundos", ((double)clock() - start) / CLOCKS_PER_SEC);
  
