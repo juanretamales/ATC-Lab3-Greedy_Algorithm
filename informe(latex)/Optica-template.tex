@@ -7,7 +7,7 @@
 \setboolean{shortarticle}{false}
 \setboolean{minireview}{false}
 
-\title{Laboratorio 2 - Backtracking}
+\title{Laboratorio 3 - Goloso}
 
 \author{Juan Retamales}
 \affil{Profesora: Mónica Villanueva}
@@ -40,7 +40,7 @@
 
 \begin{abstract}
 	\par{En }
-      este documento se da a conocer conceptos básicos del algoritmo Backtracking y el lenguaje de programación C, ya que, mediante un problema planteado se pretende comprender el funcionamiento del algoritmo además de mostrar las conclusiones realizadas.
+      este documento se da a conocer conceptos básicos del algoritmo Goloso y el lenguaje de programación C, ya que, mediante un problema planteado se pretende comprender el funcionamiento del algoritmo además de mostrar las conclusiones realizadas.
 \end{abstract}
 
 \setboolean{displaycopyright}{true}
@@ -51,78 +51,111 @@
 
 \section{Introducción}{
 	\par{En}
-    el presente documento se analiza como funciona un algoritmo de combinatoria llamado Backtracking usando el lenguaje de programación C con un problema propuesto.
-Por ello este documento consistirá en esta introducción, un enunciado del problema anteriormente mencionado, luego se detallaran los conceptos asociados en el marco teórico para comenzar la descripción de una solución, una vez llego a este punto se procederá con el análisis de los resultados para posteriormente ir a una traza de la solución y resumir las conclusiones del documento.
-
-Como objetivo planteado es el comprender el funcionamiento del método de combinatoria Backtracking.
+     el presente documento se pretende mostrar los conceptos como Método goloso, el cual mediante el objetivo que sería comprender su uso, se utilizara el lenguaje de programación C y analizarlo para el aprendizaje de estos de manera más práctica que conceptual.
 }
 
 \section{Descripción del problema}
 Se debe resolver el enunciado de la subsección A, antes del plazo de entrega informado en la subsección D.
 \subsection{Enunciado}
-La empresa
-Cuidate SA
-crea sistemas de seguridad básicos basados en com-
-binaciones de números. Se sabe que el largo de las contraseñas es de 12 unidades
-y además se deben cumplir ciertos criterios para formar las claves. En primer
-lugar no se pueden generar códigos en donde existan 3 números iguales consecu-
-tivos, la segunda condición indica que si la contraseña comienza con un número
-impar no puede terminar con un número impar, por último, la combinación no
-puede contener secuencias de más de 3 números, por ejemplo, si en la contraseña
-se forma la secuencia 1234 significa que la clave es inválida. Considerando que
-los números están entre el 0 al 9 diseñe e implemente un programa que encuentre
-todas la posibles combinaciones dado un conjunto de entrada, para esto utilice
-la técnica de \textbf{Backtracking} y el \textbf{lenguaje de programación C} \cite{actividad}.
+El banco regional de Concepción tiene problemas de atención al público y
+sus clientes se quejan constantemente de la lentitud con que avanzan las filas de
+las cajas. Al parecer los cajeros no son lo suficientemente rápidos para calcular
+el vuelto que deben entregar después de un pago y además no siempre lo hacen
+correctamente, es decir, muchas veces devuelven una cantidad errónea de dinero,
+lo cual provoca peleas y retrasos en la atención.
+Para mitigar esta situación, el banco lo contrata a usted para que diseñe e
+implemente un programa que le indique a los cajeros el vuelto que deben entre-
+gar y la cantidad mínima de efectivo para hacerlo. El sistema monetario con el
+que se rige la sucursal es el chileno, por lo tanto, se deben considerar los billetes
+de \$20.000 , \$10.000, \$5.000, \$2.000 y \$1.000 pesos, además de las monedas de
+\$500, \$100, \$50, \$10, \$5 y \$1 peso. La implementación de la solución debe ser
+en el \textbf{Lenguaje de Programación C} , y utilizando la técnica de resolución de problemas \textbf{Goloso} \cite{actividad}.
 
 \subsection{Entrada}
 En un archivo de texto titulado
 entrada.in
-se encuentran listados todos
-números que se deben utilizar para formar las contraseñas.
+se deben listar según tipo las
+cantidades de todos los billetes y todas las monedas que se mantienen en una
+caja al principio del turno. Además por línea de comando, el programa debe
+solicitar el monto a cancelar por cada cliente y el dinero que estos entregan como
+pago.
 \subsection{Salida}
-En un archivo de texto titulado
+Considerando el total a cancelar y el dinero pagado por cada cliente, el
+programa debe mostrar por consola el vuelto a entregar y la cantidad mínima
+de efectivo con el que se puede realizar dicha devolución a partir del cambio que
+hay disponible en la caja. En un archivo de texto titulado
 salida.out
-se debe mostrar separadas por
-saltos de líneas todas las contraseñas que se pueden crear con el archivo de
-entrada. Si con el contenido de la entrada no se pueden construir un conjunto
-de claves se debe informar en el archivo que se necesita otro conjunto.
+se debe
+mantener un registro de el total en caja después de cualquier transacción ejercida
+durante el día, esto para que los cajeros tengan una referencia al momento de
+balancear sus cuentas al final del turno. Recuerde que cuando un cliente hace un
+pago, se debe sumar ese monto al total de dinero en la caja, y que la cantidad de
+efectivo entregado también es la mínima posible, por ejemplo, si cancela \$35.000
+pesos, se asume que entregó 1 billete de \$20.000, otro de \$10.000 y uno de \$5.000
+pesos. La solución debe funcionar para una cantidad variable de clientes.
+Si la totalidad de sencillo que el cajero posee en caja no alcanza para dar
+vuelto a una transacción, se debe indicar por pantalla y terminar la ejecución
+del programa.
 
 
 
 %tabla
-\begin{table}
+\begin{table}[]
 \centering
 \caption{Ejemplo de entrada y salida }
 \label{my-label}
-\begin{tabular}{|c|c|lll}
-\cline{1-2}
-entrada & salida &  &  &  \\ \cline{1-2}
-0         &          &  &  &  \\ \cline{1-2}
-1         & 125433221002         &  &  &  \\ \cline{1-2}
-2         & 431023312115         &  &  &  \\ \cline{1-2}
-3         & 652323119011         &  &  &  \\ \cline{1-2}
-4         & 514173319930         &  &  &  \\ \cline{1-2}
-5         & 001122334455         &  &  &  \\ \cline{1-2}
-6         & ...............         &  &  &  \\ \cline{1-2}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\multicolumn{2}{|l|}{\textbf{Entrada.in}} & \multicolumn{2}{l|}{\textbf{Salida.out}} \\ \hline
+\multicolumn{2}{|l|}{20 20000}   & \multicolumn{2}{l|}{Inicial: 1315460}           \\ \hline
+\multicolumn{2}{|l|}{40 10000}   & \multicolumn{2}{l|}{Pago 1: 1333960}           \\ \hline
+\multicolumn{2}{|l|}{50 5000}   & \multicolumn{2}{l|}{......}           \\ \hline
+\multicolumn{2}{|l|}{40 2000}   & \multicolumn{2}{l|}{}           \\ \hline
+\multicolumn{2}{|l|}{100 1000}   & \multicolumn{2}{l|}{}           \\ \hline
+\multicolumn{2}{|l|}{45 500}   & \multicolumn{2}{l|}{}           \\ \hline
+\multicolumn{2}{|l|}{1000 100}   & \multicolumn{2}{l|}{}           \\ \hline
+\multicolumn{2}{|l|}{750 50}   & \multicolumn{2}{l|}{}           \\ \hline
+\multicolumn{2}{|l|}{500 10}   & \multicolumn{2}{l|}{}           \\ \hline
+\multicolumn{2}{|l|}{90 5}   & \multicolumn{2}{l|}{}           \\ \hline
+\multicolumn{2}{|l|}{10 1}   & \multicolumn{2}{l|}{}           \\ \hline
+\multicolumn{2}{|l|}{\textbf{Consola}}    & \multicolumn{2}{l|}{\textbf{Consola}}    \\ \hline
+\multicolumn{2}{|l|}{Total a pagar: 18500}           & \multicolumn{2}{l|}{Vuelto: 1500}           \\ \hline
+\multicolumn{2}{|l|}{Cliente entrega: 20000}           & \multicolumn{2}{l|}{1 billete de 1000}           \\ \hline
+\multicolumn{2}{|l|}{....}           & \multicolumn{2}{l|}{1 moneda de 500}           \\ \hline
+\multicolumn{2}{|l|}{}           & \multicolumn{2}{l|}{....}           \\ \hline
 \end{tabular}
 \end{table}
 
 \subsection{Entrega}
-Domingo 23 de abril del 2017 hasta las 23:59, se descontará 1 punto
+Domingo 28 de mayo del 2017 hasta las 23:55, se descontará 1 punto
 por cada hora de retraso, al no entregar se reprueba el laboratorio.
 
 
 \section{Marco Teorico}
-Se pretende mediante el enunciado anterior, comprender sobre el funcionamiento del algoritmo de fuerza bruta usando el lenguaje de programación C.
+Se pretende mediante el enunciado anterior, comprender sobre el funcionamiento del algoritmo goloso usando el lenguaje de programación C.
 
-\subsection{Método de Backtracking}
-Dado un conjunto S, se debe construir un subconjunto $ S' \subset S $
- que satisfaga una propiedad P dada.
-Al construir S´ paso a paso seleccionando en cada paso un elemento candidato a ser incorporado al conjunto construido.
+\subsection{Método Goloso}
 
-Por cada elemento seleccionado, se comprueba si el conjunto construido hasta ese momento más el nuevo elemento satisface P. Si es así entonces se incorpora y se repite el proceso. Caso contrario, se retira el último elemento incorporado a S´ y se intenta con otro elemento de $ S-S´$.
+Hay muchos problemas en los que se pretende obtener un subconjunto de \textit{n} elementos que
+satisfaga ciertas restricciones y que optimice alguna medida.  Un problema de esta clase tiene al
+menos una solución.  Puede haber varias soluciones óptimas, en cuyo caso no importa cual se
+elija.  Por ejemplo, el problema de encontrar un subconjunto de los arcos de un grafo que formen 
+el camino más corto entre dos vértices dados del grafo.  Otro ejemplo se da cuando, dados unos
+archivos almacenados en una cinta de recorrido secuencial, se quiere encontrar un modo de
+almacenarlos que garantice que el tiempo promedio de recuperación de un archivo cualquiera sea 
+mínimo.  A menudo, el problema incluye restricciones adicionales que limitan el número posible
+de soluciones.
 
-Si en algún momento no existen más candidatos, se retira el elemento anterior de S´ y se repite el proceso. Siempre se obtiene una solución, el problema es que el número de posibilidades a examinar puede ser muy grande. 
+Normalmente, estos problemas no se intentan resolver "de golpe", encontrando de un paso una
+solución óptima.  Es más frecuente que el subconjunto de la solución se vaya formando paso a
+paso, analizando durante cada etapa el elemento que conviene añadir a la solución parcial ya
+existente.  
+
+Nunca se retiran elementos del conjunto construido. Siempre se obtiene una solución pero –en
+general- no se garantiza que sea óptima. Solo en algunos problemas particulares el método goloso
+obtiene siempre una solución óptima.
+
+
  \cite{algoritmo}.
 
 \subsection{Lenguaje de programación C}
@@ -155,203 +188,166 @@ De los archivos del laboratorio se destacan los siguientes:
 
 -\textbf{main.c}: Guarda el código principal del algoritmo así como su función principal (main).
 
--\textbf{entrada.in}: Es el utilizado para que el software pueda leer los números para generar las combinaciones, cabe destacar que para no incidir a un error se utilizara el archivo en formato UTF sin BOM.
-En este archivo de texto se leen todos los caracteres, de los cuales se extraen todos los números entre 0 y 9, de ser un numero de dos dígitos quedaran como dos de un digito, y de los dígitos guardados no se podrán repetir, es decir si ingreso 33 solo se guardara una vez 3.
+-\textbf{entrada.in}: Es el utilizado para que el software pueda leer los números para generar la matriz inicial con el dinero, cabe destacar que para no incidir a un error se utilizara el archivo en formato UTF sin BOM.
 
--\textbf{salida.out}: Es el archivo el cual el software guarda las combinaciones validas con un salto de línea entre cada combinación.
+-\textbf{salida.out}: Es el archivo el cual el software guarda los cambio del dinero de la matriz.
 
--\textbf{funciones.h}: Contiene las declaraciones y una breve explicación del funcionamiento de las validaciones (funciones) usadas.
+-\textbf{funciones.h}: Contiene las declaraciones y una breve explicación de las funciones creadas usadas.
 
--\textbf{funciones.c}: Este archivo contiene el código de las validaciones declaradas en el archivo “funciones.h” las cual se encargan de revisar si los números cumplen ciertas condiciones explicadas en la subsección “Condiciones”.
+-\textbf{funciones.c}: Este archivo contiene el código de las funciones creadas usadas declaradas en el archivo “funciones.h” las cual se encargan de ver cuando dinero hay en la matriz, y leer desde el teclado un número y validarlo.
 
-\subsection{Condiciones}
-Del enunciado se pueden extraer tres condiciones que se debe cumplir para que la combinatoria sea válida:
-\begin{enumerate}
-\item No se pueden generar códigos en donde existan 3 números iguales consecutivos.
-\item Si la contraseña comienza con un número impar no puede terminar con un número impar.
-\item La combinación no puede contener secuencias de más de 3 número.
-\end{enumerate}
-Para cada una de estas condiciones se utilizó una función llamada “validadorIgualesConsecutivos”, “validadorImparImpar” y “validadorConsecutivos” respectivamente, que retornaban 1 de ser válido y 0 de no serlo.
+\subsection{Lógica}
 
-\lstset{language=C, breaklines=true, basicstyle=\footnotesize}
-\begin{lstlisting}[frame=single]
-/*
-* validadorImparImpar - verifica que si el primer numero es impar, no termine en impar
-*
-*Entrada: 2 numeros de formato int.
-*Salida: Numero int 1 si ambos son impar o 0 de lo contrario.
-*/
-int validadorImparImpar(int c1, int c12)
-{
-    if(c1%2==1 && c12%2==1)
-    {
-        return 1;
-    }
-    return 0;
-}
-\end{lstlisting}
+Para generar la solución, primero debemos leer el archivo entrada.in, para ello lo lee como textos e intenta transformarlo a números, de ser posible se considera válido.  Luego recorre un arreglo previamente inicializado llamado “entrada” con todos los “valores de moneda” previamente fijados según el software para agregarlos a la cantidad cero que tiene al inicio. Además entrada.in debe estar en formato “\{cantidad de monedas\} \{valor moneda\} ” y cada uno de estos separados por saltos de línea como se muestra en el ejemplo, luego de validar la transformación de los números los asigna en pares como “cantidad de monedas” y “valor de moneda” respectivamente. Esos dos valores de cada casilla del arreglo corresponderán a nuestra caja, separada por cantidad y valor de monedas.
 
-\subsection{Logica}
+Después crea o reemplaza de existir, el archivo salida.out el cual guarda el dinero actual de la caja después de todas sus transacciones.
 
-Para generar las combinaciones se utilizaron 12 ciclos anidados que comprendía el largo de caracteres que podía utilizar la combinación, es decir, si la combinación el largo fuera 7, solo hubieran sido necesarios 7 ciclos anidados. Cada ciclo “for” usa una variable del abecedario para identificarla y utilizarla, la cual consto de la letra “a” a la letra “l”.
-Para usar backtracking es necesario que se destaque del código las siguientes observaciones de los validadores:
-Después del tercer bucle de la combinación  en adelante se utiliza el validador “validadorIgualesConsecutivos”.
-Posteriormente en el siguiente “for” en adelante se utiliza el validador “validadorConsecutivos”.
-Finalmente en el último ciclo de la combinación se incluye el validador “validadorImparImpar”.
-Al fallar cualquiera, en dicho “for” salta inmediatamente a la siguiente combinación posible y no termina la combinación que intentaba realizar.
-Cuando termina la combinación en el doceavo “for” y es válido, se guarda en el archivo salida.out. Además cada combinación está separada por un salto de línea.
+Finalmente inicia un ciclo para realizar las operaciones que ingresa un usuario por teclado, primero pidiendo el “Total a pagar” y luego “Cliente entrega”. Con estos valores genera el valor del vuelto a entregar, de tener un vuelto recorre el arreglo entrada de los valores más altos a los valores más bajos, revisa si la aproximación por corte de la división de este valor moneda sea mayor a cero y contenga ese valor en el arreglo “entrada”, de tenerla o no, la guarda en una nueva variable llamada “operación” con cantidad en negativo indicando que se restara en caso de suma. Si logra generar el vuelto despliega el mensaje del vuelto a entregar y agrega a la variable operación, el dinero del pago. Además, realiza las operaciones con entrada sumando a la “cantidad de monedas”. De no tener vuelto o si el cliente no entrega suficiente dinero despliega sus respectivos mensajes. Para detener el ciclo de operaciones, se debe ingresar “0” o algún texto, ya que, para complementar, cada ingreso de valores está debidamente validado.
+
+Al terminar de ejecutar el programa, despliega el tiempo transcurrido en el software según el reloj del ordenador.
 
 
-\lstset{language=C, breaklines=true, basicstyle=\footnotesize}
-\begin{lstlisting}[frame=single]
-fp = fopen ( "salida.out", "a" );
-fprintf(fp, "%d%d%d%d%d%d%d%d%d%d%d%d \n", entrada[a], entrada[b], entrada[c], entrada[d], entrada[e], entrada[f], entrada[g], entrada[h], entrada[i], entrada[j], entrada[k], entrada[l]);
-fclose ( fp );
-\end{lstlisting}
-
-\subsection{Complejidad y orden}
-Para calcular el orden empezamos calculando el orden de los validadores o funciones del archivo “funciones.c” y se puede apreciar lo siguiente:
-Para el validador “validadorIgualesConsecutivos” el orden seria normalmente O((m-2)*2) pero en el archivo “main.c” nosotros siempre sabemos cuáles son los valores que toma en su “único peor caso”. Lo mismo ocurre con el validador “validadorConsecutivos” con el orden O((m-3)*3). En el caso del validador “validadorImparImpar” su orden siempre es O(2).
+\subsection{Complejidad y Orden}
+Para calcular el orden empezamos calculando el orden de funciones del archivo “funciones.c” como se ve en la siguiente tabla:
 %tabla
 \begin{table}
 \centering
-\caption{Tabla del orden - validadorIgualesConsecutivos}
+\caption{Tabla de tiempo y orden}
 \label{my-label}
-\begin{tabular}{|c|c|lll}
-\cline{1-2}
-For N° & validadorIgualesConsecutivos &  &  &  \\ \cline{1-2}
-3         & 2         &  &  &  \\ \cline{1-2}
-4         & 4         &  &  &  \\ \cline{1-2}
-5         & 6         &  &  &  \\ \cline{1-2}
-6         & 8         &  &  &  \\ \cline{1-2}
-7         & 10         &  &  &  \\ \cline{1-2}
-8         & 12         &  &  &  \\ \cline{1-2}
-9         & 14         &  &  &  \\ \cline{1-2}
-10         & 16         &  &  &  \\ \cline{1-2}
-11         & 18         &  &  &  \\ \cline{1-2}
-12         & 20         &  &  &  \\ \cline{1-2}
-\end{tabular}
-\end{table}
-%tabla
-\begin{table}
-\centering
-\caption{Tabla del orden - validadorConsecutivos}
-\label{my-label}
-\begin{tabular}{|c|c|lll}
-\cline{1-2}
-For N° & validadorConsecutivos &  &  &  \\ \cline{1-2}
-4         & 3         &  &  &  \\ \cline{1-2}
-5         & 6         &  &  &  \\ \cline{1-2}
-6         & 9         &  &  &  \\ \cline{1-2}
-7         & 12         &  &  &  \\ \cline{1-2}
-8         & 15         &  &  &  \\ \cline{1-2}
-9         & 18         &  &  &  \\ \cline{1-2}
-10         & 21         &  &  &  \\ \cline{1-2}
-11         & 24         &  &  &  \\ \cline{1-2}
-12         & 27         &  &  &  \\ \cline{1-2}
+\begin{tabular}{|l|l|l|}
+\hline
+Función & Tiempo & Orden \\ \hline
+dinero & n+1 & n  \\ \hline
+leer & 5 & c \\ \hline
 \end{tabular}
 \end{table}
 
-Finalmente luego de hacer los cálculos correspondientes para calcular orden, solo en los 12 ciclos anidados tendremos un orden de $O(142285554566920N^{12})$.
-Teniendo un orden final de $ O(142285554566932N^{12}) $ de tiempo de ejecución para generar todas las combinaciones, escribirlas en salida.out y además desplegar el tiempo que se demora en realizar lo anterior.
+Finalmente luego de hacer los cálculos correspondientes para calcular tiempo, obtenemos que su valor seria Tiempo($ (104n^2+8n+25)  $ y teniendo un orden final de $ O(n^{2}) $
 
+\subsection{Analizando algoritmo}
 
-\section{Análisis de los resultados}
+Para analizar el algoritmo se realizaran y responderán las siguientes preguntas:
 
-En la \textbf{Table 4.} Ejemplos de salida, se muestran 6 de los resultados aleatorios obtenidos con los números de entrada 1,3 y 8. 
+¿Se detiene?
+Si, cuando el archivo.in no está correctamente ingresados o tiene problemas para leerlo. Y cuando no puede generar algún vuelto o, cuando ingresa pago o vuelto con valores errores o “0”.
 
-%tabla
-\begin{table}
-\centering
-\caption{Ejemplos de salida }
-\label{my-label}
-\begin{tabular}{|c|c|lll}
-\cline{1-2}
-N° & Resultado &  &  &  \\ \cline{1-2}
-1         & 113113113118         &  &  &  \\ \cline{1-2}
-51         & 113113188138         &  &  &  \\ \cline{1-2}
-86         & 113113383318         &  &  &  \\ \cline{1-2}
-147         & 113113883388         &  &  &  \\ \cline{1-2}
-184         & 113118138838         &  &  &  \\ \cline{1-2}
-122454         & 883883883883         &  &  &  \\ \cline{1-2}
-\end{tabular}
-\end{table}
+¿Tiempo de ejecución y orden?
+Como se puede apreciar en la subsección anterior, el tiempo seria $ (132n^2+99n+24) $ y un orden de $ (132n^2) $.
 
-%tabla
-\begin{table}
-\centering
-\caption{Tiempo usado según el software}
-\label{my-label}
-\begin{tabular}{|c|c|lll}
-\cline{1-2}
-Entrada & N° de combinaciones & Tiempo &  &  \\ \cline{1-3}
-1         & 0         & 270ms &  &  \\ \cline{1-3}
-1l0         & 350         & 0.187s &  &  \\ \cline{1-3}
-asderfa         & 0         & 0.015s &  &  \\ \cline{1-3}
-12345*         & 544707         & 6m30s &  &  \\ \cline{1-3}
-13579         & 0         & 26.239s  &  &  \\ \cline{1-3}
-0123456789*         & 1103680         & 16m46s  &  &  \\ \cline{1-3}
-\end{tabular}
-\end{table}
-En la \textbf{Table 5.}Tiempo usado según el software, para las combinaciones de entrada "12345" se detuvo manualmente luego de tener más de 6 minutos en marcha el software con la cantidad de registros indicados, y lo mismo en el último caso que se detuvo manualmente a los 16 minutos aproximadamente.
+¿Se puede mejorar?
+Se podría mejorar el tiempo, mas no el orden.
 
-Para el tan grande “orden” que se mencionó, este tiempo de ejecución contrasta en gran medida el porqué de su valor.
+¿Otro método podría ser mejor?
+No, ya que algoritmo goloso para este tipo de ejercicio siempre entrega el óptimo.
 
-Además en el último caso, luego de 1103680 combinaciones, la última formada es “001002156734” y se puede deducir que llevábamos solo la una centésima parte del tiempo además de que para realizar el total de combinaciones requerirá como mínimo una hora.
-
-Es eficaz al ser más rápido y eficiente al usar mejor el recurso tiempo, en comparación con el método de fuerza bruta que termina la combinación para recién comprobar si es válido o no. 
-
-Se detiene automáticamente al terminar de realizar las combinaciones posibles y desplegar un mensaje, sin embargo de otra forma se tiene que forzar un cierre.
-
-Se podría mejorar quitando las líneas que muestran el tiempo que se demora en realizar las combinaciones pero así como esta última, solo en pequeñas medidas.
 
 
 \section{Traza de la solución}
 
-Primero revisa un archivo de texto llamado entrada.in del cual se leen todos los caracteres, de los cuales se extraen todos los números entre 0 y 9 inclusive, y se guardan en un arreglo, además de un contador para saber el largo de este arreglo.
-Luego crea o sobrescribe el archivo salida.out para guardar las combinaciones, borrando cualquier registro anterior que tuviera. 
-
-Luego pasa por los 12 ciclos “for” anidados con variables de la “a” a “l”, donde al igual que se resuelve un candado de combinación, se cada vez que un ciclo se termina, el anterior avanza una vez y llama al arreglo de combinación por cada digito para así formar cada combinatoria. Por ejemplo si de entrada tenemos el número 1 y 2, la primera combinación seria “111111111111” y la segunda “111111111112”, la tercera “111111111121” y así sucesivamente.
-
-Después del tercer bucle de la combinación en adelante se utiliza el validador “validadorIgualesConsecutivos”.
-
-Posteriormente en el siguiente “for” en adelante se utiliza el validador “validadorConsecutivos”.
-
-Finalmente en el último ciclo de la combinación se incluye el validador “validadorImparImpar”.
-
-Al fallar cualquiera, en dicho “for” salta inmediatamente a la siguiente combinación posible y no termina la combinación que intentaba realizar.
-Cuando termina la combinación en el doceavo “for” y es válido, se guarda en el archivo salida.out. Además cada combinación está separada por un salto de línea para diferenciarlos entre cada combinación. En este caso una combinación que cumpliera las condiciones se escribiría “112211221122” y después un salto de línea.
-
+Primero lee el archivo entrada.in y llena el arreglo "entrada" como se describió en la subsección \textbf{B. Lógica}, y crea el archivo salida.out, luego entra al bucle que se muestra superficialmente a continuación.
 
 \lstset{language=C, breaklines=true, basicstyle=\footnotesize}
 \begin{lstlisting}[frame=single]
-fp = fopen ( "salida.out", "a" );
-fprintf(fp, "%d%d%d%d%d%d%d%d%d%d%d%d \n", entrada[a], entrada[b], entrada[c], entrada[d], entrada[e], entrada[f], entrada[g], entrada[h], entrada[i], entrada[j], entrada[k], entrada[l]);
-                                                                                                
-/*entrada[a] seria 1*/
-/*entrada[b] seria 1*/
-/*entrada[c] seria 2*/
-/*entrada[d] seria 2*/
-/*entrada[e] seria 1*/
-/*entrada[f] seria 1*/
-/*entrada[g] seria 2*/
-/*entrada[h] seria 2*/
-/*entrada[i] seria 1*/
-/*entrada[j] seria 1*/
-/*entrada[k] seria 2*/
-/*entrada[l] seria 2*/
-/*y realiza el salto de linea.*/
-
-fclose ( fp );                                                                                  salida++;
-/* Y suma en una unidad a la variable salida. */
+while(pago!=0 || entrega!=0)
+{
+	int operacion[12][2]={{0, 20000},{0, 10000},{0, 5000},{0, 2000},{0, 1000},{0, 500},{0, 100},{0, 50},{0, 10},{0, 5},{0, 1}};
+	printf("\n(Introduce cero para terminar)");
+	pago=leer("\nTotal a pagar: ");
+	if(pago!=0)
+	{
+		printf("\n(Introduce cero para terminar)");
+		entrega=leer("\nTotal a pagar: ");
+	}
+	else
+	{
+		entrega=0;
+	}
+	vuelto=entrega-pago;
+	if(vuelto>0)
+	{
+		int temp=0;
+		actual=vuelto;/*Dinero actual que falta para hacer el vuelto, no se trabaja con vuelto por que se vuelve a utilizar.*/
+		for(int i=0;actual!=0 && i<largo;i++)
+		{
+			/* Reviso si dar vuelto de esa moneda es posible */
+			/*reviso si tengo suficientes de esas monedas para dar vuelto */
+			/*Agrego a operacion para despues quitar a caja el total si finaliza exitosamente.*/
+			/*Actualizo el vuelto a dar.*/
+		}
+		if(actual==0)
+		{
+			/*Asigno vuelto a actual para agregar el pago a caja*/
+			/*Agrego a operacion el dinero recibido*/
+			for(int i=0;i<largo;i++)
+			{
+				/*Por goloso transformo dinero recibido a cantidad de dinero y dinero*/
+			}
+			/*Muestro el mejor vuelto*/
+			for(int i=0;i<largo;i++)
+			{
+				/* Muestra el vuelto a dar en consola */
+				/*Realiza los cambios en el arreglo*/
+			}
+			cantPagos++;
+			fp = fopen ( "salida.out", "a" );
+			int din = dinero(entrada,largo);
+			fprintf(fp, "Pago %d: %d \n", cantPagos, din);
+			fclose(fp);
+		}
+		else
+		{
+			printf("\n No puede generar un vuelto con el saldo disponible, cerrando aplicacion, falto [%d]}",actual);
+			break;
+		}
+	}
+	else
+	{
+		...
+	}
+}
 \end{lstlisting}
 
+Ingreso por consola el pago, si no es válido o es cero termina la aplicación. En caso contrario como en este ejemplo se usara "8960", Luego te pide el dinero del cliente entregado, si no es válido o es cero termina la aplicación. En caso contrario calcula el vuelto y genera la mejor combinación en términos de que ocupe menos dinero disponible para desplegarlos por consola. Para este ejemplo se ingresó "10000", y por consola muestra los siguientes mensajes.
+
+\lstset{language=C, breaklines=true, basicstyle=\footnotesize}
+\begin{lstlisting}[frame=single]
+Iniciando...ok 
+Entrada.in...
+(Introduce cero para terminar)
+Total a pagar: 8960
+
+(Introduce cero para terminar)
+Cliente entrega: 10000
+
+ Vuelto: 1040
+ 1 billete de 1000 
+ 4 moneda de 10 
+(Introduce cero para terminar)
+Total a pagar: 
+\end{lstlisting}
+
+A la vez, el software actualiza entrada y agrega el registro en salida.out con el pago con su número, y el valor en caja que sería la cantidad de dinero del arreglo "entrada".
+
+\lstset{language=C, breaklines=true, basicstyle=\footnotesize}
+\begin{lstlisting}[frame=single]
+Inicial: 1395460 
+Pago 1: 1404420 
+
+\end{lstlisting}
+
+Finalmente, para terminar se puede ingresar un cero en el "Total a pagar" o en "Cliente entrega", en este ejemplo usaremos la primera opción como se muestra a continuación.
+
+\lstset{language=C, breaklines=true, basicstyle=\footnotesize}
+\begin{lstlisting}[frame=single]
+(Introduce cero para terminar)
+Total a pagar: 0
+Finalizando aplicacion
+Tiempo transcurrido: 3 segundos
+
+\end{lstlisting}
 \section{Conclusión}
 
-El método backtracking es un método de combinación que se empleó para realizar todas las combinaciones validas de números ingresados en el archivo entrada.in, dependiendo de los números distintos ingresados puede demorarse varios minutos y un gran gasto de procesamiento.
-Sin embargo no se pudo resolver el peor caso por el tiempo requerido de entrada.in que tenía todos los números posibles, sin embargo se pudo estimar el tiempo requerido y contrastarlo con el orden calculado justificando en cierta medida su valor.
-Además la actividad demostró ser más eficiente que el método de fuerza bruta y se cumplió el objetivo planteado en el documento.
-
+El método Goloso es un método que se empleó para realizar el mejor vuelto de dinero según el problema propuesto (el óptimo), y consume mucho menos recursos que otros métodos como Backtracking y Fuerza Bruta y allí radica la gran importancia de intentar usarlo especialmente en este tipo de problemas. Y en la actividad propuesta se resolvió un problema en el lenguaje C, para demostrar de manera práctica que se logró cumplir los objetivos planteados al inicio del documento.
 
 % Bibliography
 \bibliography{sample}
